@@ -1,0 +1,103 @@
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">详情</view>
+</cu-custom>
+<view class="cu-card dynamic no-card">
+  <view class="cu-item shadow">
+    <view class="cu-list menu-avatar">
+      <view class="cu-item">
+        <!-- <view class="cu-avatar round lg" style="background-image:url({{topic.avatarUrl}});"></view> -->
+        <image class="cu-avatar round lg bg-white" src="{{topic.avatarUrl}}"></image>
+        <view class="content flex-sub">
+          <view>{{topic.nickName}}</view>
+          <view class="text-gray text-sm flex justify-between">{{topic.createTime}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="text-content">{{topic.content}}</view>
+    <view class="grid flex-sub padding-lr col-3 grid-square">
+      <view class="bg-img" wx:for="{{topic.imgList}}" wx:for-item="img" wx:for-index="imgIndex" wx:key="{{imgIndex}}" style="background-image:url({{img}});" catchtap="viewImage" data-url="{{img}}"></view>
+    </view>
+    <view class="text-pink text-df text-left padding-lr padding-top-xs" wx:if="{{topic.location}}">
+      <text class="cuIcon-locationfill margin-ll-xs text-lg"></text>
+      {{topic.location.name}}
+    </view>
+    <view class="flex-box {{topic.viewNum <= 0 ? 'justify-end' : ''}}">
+      <view class="text-pink text-df text-left padding-lr padding-top-sm" wx:if="{{topic.viewNum > 0}}">
+        <text class="cuIcon-hotfill margin-ll-xs text-lg"></text>
+        热度 {{topic.viewNum}}℃
+      </view>
+      <view class="text-mauve text-xl text-right padding-lr padding-top-sm">
+        <text class="cuIcon-{{topic.thumbState ? 'appreciatefill': 'appreciate'}} margin-lr-sm shadow-wrap" catchtap="thumb"></text>
+        <text class="cuIcon-commentfill margin-lr-sm shadow-wrap" catchtap="comment" data-type="1"></text>
+      </view>
+    </view>
+    <view class="text-pink text-df text-left padding-lr padding-top-sm" wx:if="{{topic.thumbNum > 0}}">
+      <text class="cuIcon-appreciatefill margin-ll-xs text-lg"></text>
+      {{topic.thumbs}}共{{topic.thumbNum}}人觉得很赞
+    </view>
+    <view class="text-pink text-df text-left padding-lr padding-top-xs padding-bottom-xs" wx:if="{{topic.commentNum > 0}}">
+      <text class="cuIcon-commentfill margin-ll-xs text-lg"></text>
+      {{topic.commentNum}}条评论回复
+    </view>
+  </view>
+</view>
+<block wx:if="{{comment_list.length == 0}}">
+  <view class="flex justify-center text-lg text-gray margin-top-lg">
+    <text>暂时没有任何评论！</text>
+  </view>
+</block>
+<block wx:else>
+  <view class="cu-list menu menu-avatar comment solids-top">
+    <block wx:for="{{comment_list}}" wx:for-index="index" wx:for-item="clist" wx:key>
+      <view class="cu-item">
+        <!-- 显示评论列表 -->
+        <!-- <view class="cu-avatar round" style="background-image:url({{clist.comment_user_avatar}});"></view> -->
+        <image class="cu-avatar round bg-white" src="{{clist.comment_user_avatar}}"></image>
+        <view class='content'>
+          <view class='flex justify-between'>
+            <view class='text-grey'>{{clist.comment_user_name}}</view>
+            <view>
+              <text class="cuIcon-{{clist.comment_thumb_state ? 'appreciatefill': 'appreciate'}} {{clist.comment_thumb_state ? 'text-mauve' : 'text-gray'}}" catchtap="commentThumb" data-cid="{{clist._id}}" data-index="{{index}}"></text>
+              <text class="text-gray margin-left-sm">{{clist.comment_thumb_num}}</text>
+            </view>
+          </view>
+          <view class='text-gray text-content text-df margin-top-xs' catchtap='replyComment' data-name='{{clist.comment_user_name}}' data-type="2" data-cid='{{clist._id}}' data-index="{{index}}">
+            {{clist.comment_text}}
+          </view>
+          <block wx:for="{{clist.reply_list}}" wx:key wx:for-index="rindex" wx:for-item="rlist">
+            <!-- 循环回复列表 -->
+            <view class='bg-grey text-sm padding-left-sm'>
+              <view class="flex" catchtap='replyComment' data-name='{{rlist.reply_from_name}}' data-type="2" data-cid='{{clist._id}}' data-index="{{index}}">
+                <view wx:if="{{rlist.reply_to_name.length > 0 && (rlist.reply_from_name != rlist.reply_to_name) && (rindex != 0)}}">
+                  {{rlist.reply_from_name}} 回复 {{rlist.reply_to_name}}：
+                </view>
+                <!-- 这里是回复的名字 -->
+                <block wx:else>
+                  <view>{{rlist.reply_from_name}}：</view>
+                </block>
+                <view class='flex-sub'>{{rlist.reply_text}}</view>
+              </view>
+            </view>
+          </block>
+          <view class='margin-top-sm flex justify-between'>
+            <view class='text-gray text-df'>{{clist.comment_time}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</block>
+<view class="cu-bar {{comment_list.length == 0 ? 'margin-top-lg' : ''}} input" hidden="{{!needComment}}">
+  <!-- <view class="cu-avatar round" style="background-image:url({{avatarUrl}});"></view> -->
+  <image class="cu-avatar round bg-white" src="{{avatarUrl}}"></image>
+  <view class='action'>
+    <text class='cuIcon-roundaddfill text-pink'></text>
+  </view>
+  <input class='solid-bottom' value="{{comment_text}}" placeholder='{{placeholder}}' maxlength="300" cursor-spacing="10" focus="{{focus}}" bindblur="onReplyBlur" bindinput='getCommentText'></input>
+  <view class='action'>
+    <text class='cuIcon-emojifill text-mauve'></text>
+  </view>
+  <button class='cu-btn bg-mauve shadow-blur' bindtap='sendComment'>发送</button>
+</view>
+<view class="cu-load bg-white {{loadStatus}}" hidden='{{!isShow}}'></view>

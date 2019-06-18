@@ -1,0 +1,13 @@
+
+<cu-custom bgColor="bg-gradual-pink">
+    <view slot="content">西电墙</view>
+</cu-custom>
+
+<view class="box">
+    <image class="logo" src="http://img2.imgtn.bdimg.com/it/u=523276437,416996051&fm=26&gp=0.jpg"/>
+    <text class="welcome">欢迎走进西电墙</text>
+    <text class="tip">请登录浏览西电墙，并留下你的足迹</text>
+    <button type="primary" open-type="getUserInfo" bindgetuserinfo="login" size="mini">
+        <span class="cuIcon-weixin" style="font-size:medium;"> 微信授权快速登录</span> 
+    </button>
+</view>

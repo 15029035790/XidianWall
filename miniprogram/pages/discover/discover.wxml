@@ -1,0 +1,4 @@
+<cu-custom bgColor="bg-gradual-pink">
+    <view slot="content">寻物志</view>
+</cu-custom>
+<topic-list topic-type="2" nick-name="{{nickName}}" avatar-url="{{avatarUrl}}" empty-tip="{{emptyTip}}"></topic-list>

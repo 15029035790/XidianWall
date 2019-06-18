@@ -1,0 +1,38 @@
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+    <view slot="backText">返回</view>
+    <view slot="content">关于我们</view>
+</cu-custom>
+<scroll-view scroll-y class="scrollPage">
+    <view class="UCenter-bg bg-gradual-pink">
+        <image src="http://img2.imgtn.bdimg.com/it/u=523276437,416996051&fm=26&gp=0.jpg" class="png"></image>
+        <view class="text-df margin-top-sm">
+            西电墙
+            <text class="text-sm">v1.0.0</text>
+        </view>
+        <view class="margin-top-sm margin-bottom-sm text-sm">
+            <text>开发者: 汤子文、房烁、敖青青</text>
+        </view>
+        <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave"></image>
+    </view>
+    <view class='margin-lr-xl margin-top-sm margin-bottom-sm bg-white padding-xl radius shadow-lg'>
+        <view class='text-content'>
+            <view>Hi！~欢迎使用西电墙！</view>
+            <view class='margin-top-sm'>
+                西电有三大QQ公众号，分别是西电表白墙、西电小喇叭和西电撕逼墙，分别用于满足学生表白、寻物找人还有吐槽的需求。
+            </view>
+            <view class='margin-top-sm'>
+                这三大QQ公众号具有相同的运作模式：用户将信息发送给指定的QQ账号，负责接洽的人（类似客服）将发过来的消息直接截图，之后将多个截图合并发布一条说说，因此在这三大公众号的动态下，几乎全是图片九宫格的形式。
+            </view>
+            <view class='margin-top-sm'>
+                这种形式其实并不利于大段文本信息的展示，当然采用上述的运作方式无遗是高效的。因此我们决定开发这样一个小程序，将以上三者的功能合并，用户可以直接发表自己的想法，无需转发给相关账号再转变为截图的形式，直接支持发布文本和图片，同时支持匿名发表以保护用户隐私。
+            </view>
+            <view class='margin-top-sm'>
+                非常感谢云开发这一新的开发模式，使得我们可以不必过多关注服务器相关的配置，大大降低了我们的开发难度。同时，非常感谢ColorUI组件库的作者，其开发的组件库实在称得上高颜值，简单易用，必须赞一个。
+            </view>
+            <view class='margin-top-sm'>
+                当然，该小程序仅仅用于参加比赛，尚处于开发版，不涉及商用，其中爬取了部分三大公众号的数据，并采用了其相应的头像和昵称，以上行为均用于学习之用，如果觉得侵权，我们将致以诚挚的歉意。
+            </view>
+            <view class='margin-top-sm'>更多功能敬请期待！</view>
+        </view>
+    </view>
+</scroll-view>

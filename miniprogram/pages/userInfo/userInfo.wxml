@@ -1,0 +1,31 @@
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+    <view slot="backText">返回</view>
+    <view slot="content">个人信息</view>
+</cu-custom>
+<view class="cu-list menu sm-border">
+    <view class="cu-item arrow" bindtap="modifyAvatar">
+        <view class="content">
+            <text class="text-grey">头像</text>
+        </view>
+        <view class="action padding-top-sm padding-bottom-sm">
+            <!-- <view class="cu-avatar round lg bg-white" style="background-image:url({{avatarUrl}});"></view> -->
+            <image class="cu-avatar round lg bg-white" src="{{avatarUrl}}"></image>
+        </view>
+    </view>
+    <view class="cu-item arrow">
+        <navigator class="content" hover-class="none" url="../modifyNickName/modifyNickName?nickName={{nickName}}">
+            <text class="text-grey">昵称</text>
+        </navigator>
+        <navigator class="action" hover-class="none" url="../modifyNickName/modifyNickName?nickName={{nickName}}">
+            <text class="text-grey text-df">{{nickName}}</text>
+        </navigator>
+    </view>
+    <view class="cu-item arrow">
+        <navigator class="content" hover-class="none" url="../modifySignature/modifySignature?signature={{signature}}">
+            <text class="text-grey">个性签名</text>
+        </navigator>
+        <navigator class="action" hover-class="none" url="../modifySignature/modifySignature?signature={{signature}}">
+            <text class="text-grey text-df">{{signature}}</text>
+        </navigator>
+    </view>
+</view>

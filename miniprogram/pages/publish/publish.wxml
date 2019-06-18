@@ -1,0 +1,40 @@
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+    <view slot="backText">返回</view>
+    <view slot="content">发布</view>
+</cu-custom>
+<view class="cu-form-group">
+    <textarea maxlength="-1" bindinput="textareaInput" placeholder="分享你的故事..."></textarea>
+</view>
+<view class="cu-bar bg-white">
+    <view class="action">图片上传</view>
+    <view class="action">{{imgList.length}}/{{maxImageNum}}</view>
+</view>
+<view class="cu-form-group">
+    <view class="grid col-4 grid-square flex-sub">
+        <view class="bg-img" wx:for="{{imgList}}" wx:key="{{index}}" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+                <text class="cuIcon-close"></text>
+            </view>
+        </view>
+        <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<maxImageNum}}">
+            <text class="cuIcon-cameraadd"></text>
+        </view>
+    </view>
+</view>
+<view class="cu-form-group margin-top">
+    <view class="flex-left text-xxl">
+        <text class="{{public?'cuIcon-attentionfill': 'cuIcon-attentionforbidfill'}} text-pink margin-right-sm"></text>
+        <view class="title">{{publicTip}}</view>
+    </view>
+    <switch class="mauve sm" checked bindchange="isPublic"></switch>
+</view>
+<view class="cu-form-group" bindtap="chooseLocation">
+    <view class="flex-left text-xxl">
+        <text class="cuIcon-locationfill text-pink margin-right-sm"></text>
+        <view class="title">{{locationTip}}</view>
+    </view>
+    <text class="cuIcon-right text-gray"></text>
+</view>
+
+<button class="cu-btn radius bg-mauve shadow margin-top fr margin-right-sm" style="text-align:center;" bindtap="publish">发表</button>

@@ -1,0 +1,8 @@
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+    <view slot="backText">返回</view>
+    <view slot="content">我赞过的</view>
+</cu-custom>
+<topic-list id="topic-list" topic-list="{{topicList}}" topic-type="{{topicType}}" 
+nick-name="{{nickName}}" avatar-url="{{avatarUrl}}" need-write="{{false}}" empty-tip="{{emptyTip}}"></topic-list>
+<view class="cu-load bg-white {{loadStatus}}" hidden='{{!isShow}}'></view>
+

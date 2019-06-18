@@ -1,0 +1,76 @@
+<cu-custom bgColor="bg-gradual-pink">
+  <view slot="content">我的</view>
+</cu-custom>
+<navigator url='../userInfo/userInfo'>
+  <view class="cu-card case">
+    <view class="cu-item shadow-blur">
+      <view class="flex padding-sm bg-white justify-between align-center" style="border-radius:20rpx;">
+        <view class="flex">
+          <view class="cu-avatar round xl bg-white" style="background-image:url({{userInfo.avatarUrl}});">
+            <view class="cu-tag badge {{userInfo.gender == 1?'cuIcon-male bg-blue':'cuIcon-female bg-pink'}}"></view>
+          </view>
+          <view class="flex flex-direction margin-left-lg userInfo">
+            <text class="text-black text-lg margin-top-sm">{{userInfo.nickName}}</text>
+            <text class="text-gray text-sm margin-top-xs">{{userInfo.signature}}</text>
+          </view>
+        </view>
+        <view class="text-xl margin-right-sm">
+          <text class="cuIcon-right text-grey"></text>
+        </view>
+      </view>
+    </view>
+  </view>
+</navigator>
+<view class="cu-list menu sm-border card-menu margin-top">
+  <view class="cu-item arrow">
+    <navigator class="content" hover-class="none" url="../myTopics/myTopics">
+      <text class="cuIcon-attentionfill text-orange"></text>
+      <text class="text-grey">我的说说</text>
+    </navigator>
+    <view class="action">
+      <text class="text-grey text-sm">{{userInfo.topicNum}}</text>
+    </view>
+  </view>
+  <view class="cu-item arrow">
+    <navigator class="content" hover-class="none" url="../myCollections/myCollections">
+      <text class="cuIcon-appreciatefill text-orange"></text>
+      <text class="text-grey">我赞过的</text>
+    </navigator>
+    <view class="action">
+      <text class="text-grey text-sm">{{userInfo.colletionNum}}</text>
+    </view>
+  </view>
+  <view class="cu-item arrow">
+    <navigator class="content" hover-class="none" url="../about/about">
+      <text class="cuIcon-group_fill text-orange"></text>
+      <text class="text-grey">关于我们</text>
+    </navigator>
+  </view>
+  <view class="cu-item arrow" bindtap="checkUpgrade">
+    <view class="content" hover-class="none">
+      <text class="cuIcon-creativefill text-orange"></text>
+      <text class="text-grey">版本更新</text>
+    </view>
+    <view class="action">
+      <text class="text-grey text-df">1.0.0</text>
+    </view>
+  </view>
+  <view class="cu-item arrow">
+    <button class="cu-btn content" open-type="openSetting">
+      <text class="cuIcon-settingsfill text-olive"></text>
+      <text class="text-grey">权限管理</text>
+    </button>
+  </view>
+  <view class="cu-item arrow">
+    <button class="cu-btn content" open-type="feedback">
+      <text class="cuIcon-communityfill text-olive"></text>
+      <text class="text-grey">反馈意见</text>
+    </button>
+  </view>
+  <view class="cu-item arrow">
+    <button class="cu-btn content" open-type="contact">
+      <text class="cuIcon-servicefill text-olive"></text>
+      <text class="text-grey">联系客服</text>
+    </button>
+  </view>
+</view>

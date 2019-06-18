@@ -1,0 +1,5 @@
+.userInfo {
+  height: 100%;
+  font-weight: bold;
+  justify-content: flex-start;
+}

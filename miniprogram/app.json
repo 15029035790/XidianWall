@@ -1,0 +1,62 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/discover/discover",
+    "pages/complaint/complaint",
+    "pages/mine/mine",
+    "pages/userInfo/userInfo",
+    "pages/modifyNickName/modifyNickName",
+    "pages/modifySignature/modifySignature",
+    "pages/login/login",
+    "pages/publish/publish",
+    "pages/detail/detail",
+    "pages/myTopics/myTopics",
+    "pages/myCollections/myCollections",
+    "pages/about/about"
+  ],
+  "tabBar": {
+    "backgroundColor": "#6739b6",
+    "color": "#f1f1f1",
+    "selectedColor": "#e03997",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "表白墙",
+        "iconPath": "images/like.png",
+        "selectedIconPath": "images/like_selected.png"
+      },{
+        "pagePath": "pages/discover/discover",
+        "text": "寻物志",
+        "iconPath": "images/discover.png",
+        "selectedIconPath": "images/discover_selected.png"
+      },{
+        "pagePath": "pages/complaint/complaint",
+        "text": "吐槽屋",
+        "iconPath": "images/hot.png",
+        "selectedIconPath": "images/hot_selected.png"
+      },{
+        "pagePath": "pages/mine/mine",
+        "text": "私密圈",
+        "iconPath": "images/mine.png",
+        "selectedIconPath": "images/mine_selected.png"
+      }
+    ]
+  },
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#13B5B1",
+    "navigationBarTitleText": "西电墙",
+    "navigationBarTextStyle": "white",
+    "navigationStyle": "custom"
+  },
+  "usingComponents": {
+    "cu-custom": "colorui/components/cu-custom"
+  },
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "需要获取您的地理位置以使用地图功能"
+    }
+  }
+}

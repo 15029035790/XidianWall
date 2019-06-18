@@ -1,0 +1,19 @@
+{
+  "name": "vant-weapp",
+  "version": "0.5.12",
+  "description": "vant ui component",
+  "main": "app.js",
+  "dependencies": {
+    "vant-weapp": "^0.5.13"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "van",
+    "ui"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,67 @@
+<view class='pageView'>
+    <list-view class='listView_box' length='{{topicList.length}}' emptyText='{{emptyTip}}' noMoreText='没了，兄弟，你都踩我脚了。。。' noMore='{{noMore}}' bindonRefresh='onRefresh' bindonLoadMore='onLoadMore'>
+        <view class='description'>
+            <block wx:for="{{topicList}}" wx:key>
+                <view class="cu-card dynamic no-card margin-bottom" bindtap="viewDetail" data-index="{{index}}" data-id="{{item._id}}">
+                    <view class="cu-item shadow-blur">
+                        <view class="cu-list menu-avatar">
+                            <view class="cu-item">
+                                <image class="cu-avatar round lg bg-white" src="{{item.avatarUrl}}"></image>
+                                <view class="content flex-sub">
+                                    <view>{{item.nickName}}</view>
+                                    <view class="text-gray text-sm flex justify-between">
+                                        {{item.createTime}}
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="text-content">{{item.content}}</view>
+                        <view class="grid flex-sub padding-lr col-3 grid-square">
+                            <view class="bg-img" wx:for="{{item.imgList}}" wx:for-item="img" wx:for-index="imgIndex" wx:key="{{imgIndex}}" style="background-image:url({{img}});" catchtap="viewImage" data-url="{{img}}" data-index="{{index}}"></view>
+                        </view>
+                        <view class="text-pink text-df text-left padding-lr padding-top-xs" wx:if="{{item.location}}">
+                            <text class="cuIcon-locationfill margin-ll-xs text-lg"></text>
+                            {{item.location.name}}
+                        </view>
+                        <view class="flex-box {{item.viewNum <= 0 ? 'flex-end' : ''}}">
+                            <view class="text-pink text-df text-left padding-lr padding-top-sm" wx:if="{{item.viewNum > 0}}">
+                                <text class="cuIcon-hotfill margin-ll-xs text-lg"></text>
+                                热度 {{item.viewNum}}℃
+                            </view>
+                            <view class="text-mauve text-xl text-right padding-lr padding-top-sm">
+                                <text class="cuIcon-{{item.thumbState ? 'appreciatefill': 'appreciate'}} margin-lr-sm shadow-wrap" data-id="{{item._id}}" data-index="{{index}}" catchtap="thumb"></text>
+                                <text class="cuIcon-commentfill margin-lr-sm shadow-wrap" data-id="{{item._id}}" data-index="{{index}}" catchtap="comment"></text>
+                            </view>
+                        </view>
+                        <view class="text-pink text-df text-left padding-lr padding-top-sm" wx:if="{{item.thumbNum > 0}}">
+                            <text class="cuIcon-appreciatefill margin-ll-xs text-lg"></text>
+                            {{item.thumbs}}共{{item.thumbNum}}人觉得很赞
+                        </view>
+                        <view class="text-pink text-df text-left padding-lr padding-top-xs padding-bottom-sm" wx:if="{{item.commentNum > 0}}">
+                            <text class="cuIcon-commentfill margin-ll-xs text-lg"></text>
+                            {{item.commentNum}}条评论回复
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <view class="cu-bar foot input" hidden="{{!needComment}}">
+                <image class="cu-avatar round bg-white" src="{{avatarUrl}}"></image>
+                <view class='action'>
+                    <text class='cuIcon-roundaddfill text-pink'></text>
+                </view>
+                <input class='solid-bottom' value="{{comment_text}}" placeholder='{{placeholder}}' maxlength="300" cursor-spacing="10" focus="{{focus}}" bindblur="onReplyBlur" bindinput='getCommentText'></input>
+                <view class='action'>
+                    <text class='cuIcon-emojifill text-mauve'></text>
+                </view>
+                <button class='cu-btn bg-mauve shadow-blur' bindtap='sendComment'>发送</button>
+            </view>
+            <view class="publish-topic shadow-blur" style="{{needComment?'bottom:100rpx;':''}}" catchtap="writeTopic" wx:if="{{needWrite}}">
+                <text class='cuIcon-roundaddfill text-mauve'></text>
+            </view>
+        </view>
+    </list-view>
+    <view class='cu-load load-modal' style="bottom:0rpx;" wx:if="{{loading}}">
+        <image src='/images/show_love.png' class='png' mode='aspectFit'></image>
+        <view class='gray-text'>加载中...</view>
+    </view>
+</view>

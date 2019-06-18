@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "topic-list": "../../components/topic-list/topic-list"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

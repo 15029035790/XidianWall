@@ -1,0 +1,8 @@
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+    <view slot="backText">返回</view>
+    <view slot="content">{{ title }}</view>
+</cu-custom>
+<view class="cu-form-group">
+    <input value="{{ info }}" maxLength="30" bindinput="getNewValue"></input>
+    <button class="cu-btn bg-mauve shadow" bindtap="confirm">完成</button>
+</view>
