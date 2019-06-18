@@ -11,16 +11,16 @@
 
 ## 3.项目效果图例
 <div style="align: center">
-<div style="border:solid 1px 000;"><img src="screenshot/login.png" title="登录授权" width="360"></div>
-<div style="border:solid 1px 000;"><img src="screenshot/fall_in_love.png" title="表白墙" width="360"></div>
-<div style="border:solid 1px 000;"><img src="screenshot/discover.png" title="寻物志" width="360"></div>
-<div style="border:solid 1px 000;"><img src="screenshot/complaint.png" title="吐槽屋" width="360"></div>
-<div style="border:solid 1px 000;"><img src="screenshot/mine.png" title="我的" width="360"></div>
-<div style="border:solid 1px 000;"><img src="screenshot/publish.png" title="发布说说" width="360"></div>
-<div style="border:solid 1px 000;"><img src="screenshot/details.png" title="说说详情" width="360"></div>
-<div style="border:solid 1px 000;"><img src="screenshot/about_us.png" title="关于我们" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/login.png" title="登录授权" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/fall_in_love.png" title="表白墙" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/discover.png" title="寻物志" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/complaint.png" title="吐槽屋" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/mine.png" title="我的" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/publish.png" title="发布说说" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/details.png" title="说说详情" width="360"></div>
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/about_us.png" title="关于我们" width="360"></div>
 </div>
 
 ## 4.源码链接
 
-https://github.com/15029035790/XidianWall.git
+https://github.com/15029035790/XidianWall
