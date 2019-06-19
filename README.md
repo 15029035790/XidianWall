@@ -10,7 +10,6 @@
 ![功能结构图](screenshot/西电墙-功能结构图.png)
 
 ## 3.项目效果图例
-<div style="align: center">
 <div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/login.png" title="登录授权" width="360"></div>
 <div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/fall_in_love.png" title="表白墙" width="360"></div>
 <div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/discover.png" title="寻物志" width="360"></div>
@@ -19,8 +18,10 @@
 <div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/publish.png" title="发布说说" width="360"></div>
 <div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/details.png" title="说说详情" width="360"></div>
 <div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/about_us.png" title="关于我们" width="360"></div>
-</div>
 
-## 4.源码链接
+## 4.即刻体验
+<div style="border:solid 1px 000;"><img src="https://github.com/15029035790/XidianWall/blob/master/screenshot/体验版二维码.jpg" title="体验版二维码" width="360"></div>
+
+## 5.源码链接
 
 https://github.com/15029035790/XidianWall
