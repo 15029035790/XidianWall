@@ -1,4 +1,4 @@
 <cu-custom bgColor="bg-gradual-pink">
     <view slot="content">吐槽屋</view>
 </cu-custom>
-<topic-list topic-type="3" empty-tip="{{emptyTip}}" nick-name="{{nickName}}" avatar-url="{{avatarUrl}}"></topic-list>
+<topic-list topic-type="3" empty-tip="{{emptyTip}}"></topic-list>

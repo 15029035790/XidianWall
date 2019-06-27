@@ -1,6 +1,7 @@
 const db = wx.cloud.database()
 const topics = db.collection('topics')
 const comments = db.collection('comments')
+const userInfo = db.collection('userinfo')
 const _ = db.command
 const app = getApp()
 const common = require('../../common')
@@ -17,8 +18,6 @@ Component({
       value: []
     },
     topicType: String,
-    nickName: String,
-    avatarUrl: String,
     // 页面获取的说说类型，1表示表白墙，2表示寻物志，3表示吐槽屋
     topicType: {
       type: String,
@@ -52,19 +51,43 @@ Component({
     needComment: false,
     focus: false,
     blur: false,
+    thumbClickCount: 0,
     comment_text: '',
     placeholder: "就不说一句吗？"
   },
 
   lifetimes: {
     // 在组件在视图层布局完成后执行,它与attached不同：attached执行在页面onLoad()之前，ready执行在页面onLoad()之后
-    attached: function() {
+    attached: function () {
       setTimeout(() => {
         this.setData({
           loading: true
         })
-        this.getList()
-      }, 400)
+        try {
+          if (!app.globalData.openId) {
+            wx.cloud.callFunction({
+              name: "getOpenID"
+            }).then(res => {
+              console.log(res)
+              app.globalData.openId = res.result.openId
+              this.getUserInfo()
+            })
+          } else if(!app.globalData.nickName){
+            this.getUserInfo()
+          } else {
+            this.getList()
+          }
+        } catch (err) {
+          console.error(err)
+          this.setData({
+            loading: false
+          })
+          wx.showToast({
+            title: '数据加载异常',
+            mask: true
+          })
+        }
+      }, 300)
     }
   },
 
@@ -107,7 +130,7 @@ Component({
               let thumbNumStr = 'topicList[' + i + '].thumbNum'
               let thumbStateStr = 'topicList[' + i + '].thumbState'
               let thumbListStr = 'topicList[' + i + '].thumbList'
-              let viewNumStr = 'topicList[' + i + '].viewNum'  
+              let viewNumStr = 'topicList[' + i + '].viewNum'
               let commentNumStr = 'topicList[' + i + '].commentNum'
               this.setData({
                 [thumbStateStr]: item.thumbState,
@@ -127,6 +150,23 @@ Component({
    * 组件的方法列表
    */
   methods: {
+
+    /**
+     * 获取用户信息：头像和昵称
+     */
+    getUserInfo() {
+      userInfo.where({
+        _openid: app.globalData.openId
+      }).field({
+        avatarUrl: true,
+        nickName: true
+      }).get().then(res => {
+        console.log('userInfo', res.data)
+        app.globalData.avatarUrl = res.data[0].avatarUrl
+        app.globalData.nickName = res.data[0].nickName
+        this.getList()
+      })
+    },
 
     /**
      * 处理点赞相关的数据
@@ -172,6 +212,9 @@ Component({
       }
     },
 
+    /**
+     * 获取数据
+     */
     getList: function () {
       topics.orderBy('createTime', 'desc')
         .where({
@@ -218,6 +261,19 @@ Component({
     },
 
     /**
+     * 用于处理页面跳转的点击事件重复点击问题
+     */
+    buttonClicked: function() {
+      this.setData({
+        cardClicked: true
+      })
+      setTimeout(function () {
+        this.setData({
+          cardClicked: false
+        })
+      }, 500)
+    },
+    /**
      * 跳转到详情页
      */
     viewDetail: function (e) {
@@ -225,6 +281,10 @@ Component({
         this.data.blur = false
         return
       }
+      wx.showLoading({
+        title: '加载中...',
+        mask: true
+      })
       let doc_id = e.currentTarget.dataset.id
       let index = e.currentTarget.dataset.index
       topics.doc(doc_id).update({
@@ -234,8 +294,16 @@ Component({
       }).then(res => {
         this.data.detailId = doc_id
         app.globalData.detailTopic = this.properties.topicList[index]
+        wx.hideLoading()
         wx.navigateTo({
           url: '/pages/detail/detail'
+        })
+      }).catch(err => {
+        console.error(err)
+        wx.hideLoading()
+        wx.showToast({
+          title: '网络异常ops',
+          mask: true
         })
       })
 
@@ -264,6 +332,11 @@ Component({
         this.data.blur = false
         return
       }
+      this.data.thumbClickCount += 1
+      console.log(this.data.thumbClickCount)
+      if (this.data.thumbClickCount > 1) {
+        return
+      }
       let doc_id = e.currentTarget.dataset.id
       let index = e.currentTarget.dataset.index
       let topic = this.properties.topicList[index]
@@ -271,49 +344,57 @@ Component({
       let thumbNumStr = 'topicList[' + index + '].thumbNum'
       let thumbStateStr = 'topicList[' + index + '].thumbState'
       let thumbListStr = 'topicList[' + index + '].thumbList'
-      let state = !topic.thumbState
-      if (state) {
-        topics.doc(doc_id).update({
-          data: {
-            thumbList: _.push(this.properties.nickName),
-            thumbNum: _.inc(1)
-          }
-        }).then(res => {
-          let thumbList = []
-          if (topic.thumbList) {
-            topic.thumbList.push(this.properties.nickName)
-            thumbList = topic.thumbList
-          } else {
-            thumbList.push(this.properties.nickName)
-          }
-          let thumbs = thumbList.join('、')
-          console.log(thumbList)
-          console.log(thumbs)
-          this.setData({
-            [thumbStateStr]: state,
-            [thumbNumStr]: topic.thumbNum + 1,
-            [thumbStr]: thumbs,
-            [thumbListStr]: thumbList
+      try {
+        let state = !topic.thumbState
+        if (state) {
+          topics.doc(doc_id).update({
+            data: {
+              thumbList: _.push(app.globalData.nickName),
+              thumbNum: _.inc(1)
+            }
+          }).then(res => {
+            let thumbList = []
+            if (topic.thumbList) {
+              topic.thumbList.push(app.globalData.nickName)
+              thumbList = topic.thumbList
+            } else {
+              thumbList.push(app.globalData.nickName)
+            }
+            let thumbs = thumbList.join('、')
+            console.log('thumb list:', thumbList)
+            console.log('thumb:', thumbs)
+            this.setData({
+              thumbClickCount: 0,
+              [thumbStateStr]: state,
+              [thumbNumStr]: topic.thumbNum + 1,
+              [thumbStr]: thumbs,
+              [thumbListStr]: thumbList
+            })
           })
-        })
-      } else {
-        topics.doc(doc_id).update({
-          data: {
-            thumbList: _.pop(),
-            thumbNum: _.inc(-1)
-          }
-        }).then(res => {
-          topic.thumbList.pop()
-          let thumbList = topic.thumbList
-          console.log(thumbList)
-          let thumbs = thumbList.join('、')
-          console.log(thumbs)
-          this.setData({
-            [thumbStateStr]: state,
-            [thumbNumStr]: topic.thumbNum - 1,
-            [thumbListStr]: thumbList,
-            [thumbStr]: thumbs
+        } else {
+          topics.doc(doc_id).update({
+            data: {
+              thumbList: _.pop(),
+              thumbNum: _.inc(-1)
+            }
+          }).then(res => {
+            topic.thumbList.pop()
+            let thumbList = topic.thumbList
+            console.log(thumbList)
+            let thumbs = thumbList.join('、')
+            console.log(thumbs)
+            this.setData({
+              thumbClickCount: 0,
+              [thumbStateStr]: state,
+              [thumbNumStr]: topic.thumbNum - 1,
+              [thumbListStr]: thumbList,
+              [thumbStr]: thumbs
+            })
           })
+        }
+      } catch(e) {
+        this.setData({
+          thumbClickCount: 0
         })
       }
     },
@@ -362,7 +443,7 @@ Component({
 
     sendComment: function () {
       let comment_detail = {}
-      comment_detail.comment_user_name = this.properties.nickName
+      comment_detail.comment_user_name = app.globalData.nickName
       comment_detail.comment_user_avatar = this.properties.avatarUrl
       comment_detail.comment_topic_id = this.data.comment_topic_id
       comment_detail.comment_text = this.data.comment_text

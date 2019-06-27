@@ -23,6 +23,8 @@ Page({
     now_reply_to_name: '',
     placeholder: "就不说一句吗？",
     topic: {},
+    thumbClickCount: 0, // 点赞点击次数
+    commentThumbClickCount: 0, // 评论的点赞点击次数
     comment_list: []
   },
 
@@ -40,25 +42,25 @@ Page({
     })
     // 获取所有相关的评论和回复数据
     comments.orderBy('comment_time', 'asc')
-    .where({
-      comment_topic_id: this.data.topic._id
-    }).limit(20).get().then(res => {
-      console.log(res.data)
-      for (let i = 0; i < res.data.length; i++) {
-        // 时间格式化
-        res.data[i].comment_time = common.dateFormat('yyyy年MM月dd日 hh:mm', res.data[i].comment_time)
-        let replyList = res.data[i].reply_list
-        if (replyList && replyList.length != 0) {
-          for (let j = 0; j < replyList.length; j++) {
-            const item = replyList[j];
-            item.reply_time = common.dateFormat('yyyy年MM月dd日 hh:mm', item.reply_time)
+      .where({
+        comment_topic_id: this.data.topic._id
+      }).limit(20).get().then(res => {
+        console.log(res.data)
+        for (let i = 0; i < res.data.length; i++) {
+          // 时间格式化
+          res.data[i].comment_time = common.dateFormat('yyyy年MM月dd日 hh:mm', res.data[i].comment_time)
+          let replyList = res.data[i].reply_list
+          if (replyList && replyList.length != 0) {
+            for (let j = 0; j < replyList.length; j++) {
+              const item = replyList[j];
+              item.reply_time = common.dateFormat('yyyy年MM月dd日 hh:mm', item.reply_time)
+            }
           }
         }
-      }
-      this.setData({
-        comment_list: res.data
+        this.setData({
+          comment_list: res.data
+        })
       })
-    })
   },
 
   /**
@@ -84,55 +86,68 @@ Page({
       this.data.blur = false
       return
     }
+    this.data.thumbClickCount += 1
+    console.log(this.data.thumbClickCount)
+    if (this.data.thumbClickCount > 1) {
+      return
+    }
     let doc_id = this.data.topic._id
     let topic = this.data.topic
     let thumbStr = 'topic.thumbs'
     let thumbNumStr = 'topic.thumbNum'
     let thumbStateStr = 'topic.thumbState'
     let thumbListStr = 'topic.thumbList'
-    let state = !topic.thumbState
-    if (state) {
-      topics.doc(doc_id).update({
-        data: {
-          thumbList: _.push(app.globalData.nickName),
-          thumbNum: _.inc(1)
-        }
-      }).then(res => {
-        let thumbList = []
-        if (topic.thumbList) {
-          topic.thumbList.push(app.globalData.nickName)
-          thumbList = topic.thumbList
-        } else {
-          thumbList.push(app.globalData.nickName)
-        }
-        let thumbs = thumbList.join('、')
-        console.log(thumbList)
-        console.log(thumbs)
-        this.setData({
-          [thumbStateStr]: state,
-          [thumbNumStr]: topic.thumbNum + 1,
-          [thumbStr]: thumbs,
-          [thumbListStr]: thumbList
+    try {
+      let state = !topic.thumbState
+      if (state) {
+        topics.doc(doc_id).update({
+          data: {
+            thumbList: _.push(app.globalData.nickName),
+            thumbNum: _.inc(1)
+          }
+        }).then(res => {
+          let thumbList = []
+          if (topic.thumbList) {
+            topic.thumbList.push(app.globalData.nickName)
+            thumbList = topic.thumbList
+          } else {
+            thumbList.push(app.globalData.nickName)
+          }
+          let thumbs = thumbList.join('、')
+          console.log('thumb list:', thumbList)
+          console.log('thumb:', thumbs)
+          this.setData({
+            thumbClickCount: 0,
+            [thumbStateStr]: state,
+            [thumbNumStr]: topic.thumbNum + 1,
+            [thumbStr]: thumbs,
+            [thumbListStr]: thumbList
+          })
         })
-      })
-    } else {
-      topics.doc(doc_id).update({
-        data: {
-          thumbList: _.pop(),
-          thumbNum: _.inc(-1)
-        }
-      }).then(res => {
-        topic.thumbList.pop()
-        let thumbList = topic.thumbList
-        console.log(thumbList)
-        let thumbs = thumbList.join('、')
-        console.log(thumbs)
-        this.setData({
-          [thumbStateStr]: state,
-          [thumbNumStr]: topic.thumbNum - 1,
-          [thumbListStr]: thumbList,
-          [thumbStr]: thumbs
+      } else {
+        topics.doc(doc_id).update({
+          data: {
+            thumbList: _.pop(),
+            thumbNum: _.inc(-1)
+          }
+        }).then(res => {
+          topic.thumbList.pop()
+          let thumbList = topic.thumbList
+          console.log('thumb list:', thumbList)
+          let thumbs = thumbList.join('、')
+          console.log('thumb:', thumbs)
+          this.setData({
+            thumbClickCount: 0,
+            [thumbStateStr]: state,
+            [thumbNumStr]: topic.thumbNum - 1,
+            [thumbListStr]: thumbList,
+            [thumbStr]: thumbs
+          })
         })
+      }
+    } catch (e) {
+      this.setData({
+        thumbClickCount: 0
       })
     }
   },
@@ -237,20 +252,20 @@ Page({
           }
         }).then(res => {
           comments.where({
-            _id: this.data.now_comment_id
-          }).field({
-            reply_list: true
-          }).get()
-          .then(res => {
-            console.log(res.data[0].reply_list)
-            let commentNumStr = 'topic.commentNum'
-            let replyListStr = 'comment_list[' + this.data.now_comment_index + '].reply_list'
-            this.setData({
-              [commentNumStr]: this.data.topic.commentNum + 1,
-              [replyListStr]: res.data[0].reply_list,
-              comment_text: ''
+              _id: this.data.now_comment_id
+            }).field({
+              reply_list: true
+            }).get()
+            .then(res => {
+              console.log(res.data[0].reply_list)
+              let commentNumStr = 'topic.commentNum'
+              let replyListStr = 'comment_list[' + this.data.now_comment_index + '].reply_list'
+              this.setData({
+                [commentNumStr]: this.data.topic.commentNum + 1,
+                [replyListStr]: res.data[0].reply_list,
+                comment_text: ''
+              })
             })
-          })
         })
       }).catch(console.error)
     }
@@ -261,35 +276,48 @@ Page({
    */
   commentThumb: function (e) {
     let cid = e.currentTarget.dataset.cid
-    let index = e.currentTarget.dataset.index 
-    if (this.data.comment_list[index].comment_thumb_state) {
-      comments.doc(cid).update({
-        data: {
-          comment_thumb_num: _.inc(-1)
-        }
-      }).then(res => {
-        let commentThumbNumStr = 'comment_list[' + index + '].comment_thumb_num'
-        let commentThumbStateStr = 'comment_list[' + index + '].comment_thumb_state'
-        this.setData({
-          [commentThumbStateStr]: false,
-          [commentThumbNumStr]: this.data.comment_list[index].comment_thumb_num - 1
+    let index = e.currentTarget.dataset.index
+    this.data.commentThumbClickCount += 1
+    console.log(this.data.commentThumbClickCount)
+    if (this.data.commentThumbClickCount > 1) {
+      return
+    }
+    try {
+      if (this.data.comment_list[index].comment_thumb_state) {
+        comments.doc(cid).update({
+          data: {
+            comment_thumb_num: _.inc(-1)
+          }
+        }).then(res => {
+          let commentThumbNumStr = 'comment_list[' + index + '].comment_thumb_num'
+          let commentThumbStateStr = 'comment_list[' + index + '].comment_thumb_state'
+          this.setData({
+            commentThumbClickCount: 0,
+            [commentThumbStateStr]: false,
+            [commentThumbNumStr]: this.data.comment_list[index].comment_thumb_num - 1
+          })
         })
-      })
-    } else {
-      comments.doc(cid).update({
-        data: {
-          comment_thumb_num: _.inc(1)
-        }
-      }).then(res => {
-        let commentThumbNumStr = 'comment_list[' + index + '].comment_thumb_num'
-        let commentThumbStateStr = 'comment_list[' + index + '].comment_thumb_state'
-        this.setData({
-          [commentThumbStateStr]: true,
-          [commentThumbNumStr]: this.data.comment_list[index].comment_thumb_num + 1
+      } else {
+        comments.doc(cid).update({
+          data: {
+            comment_thumb_num: _.inc(1)
+          }
+        }).then(res => {
+          let commentThumbNumStr = 'comment_list[' + index + '].comment_thumb_num'
+          let commentThumbStateStr = 'comment_list[' + index + '].comment_thumb_state'
+          this.setData({
+            commentThumbClickCount: 0,
+            [commentThumbStateStr]: true,
+            [commentThumbNumStr]: this.data.comment_list[index].comment_thumb_num + 1
+          })
         })
+      }
+    } catch (e) {
+      this.setData({
+        commentThumbClickCount: 0
       })
-    } 
-    
+    }
+
   },
 
   /**
@@ -297,26 +325,26 @@ Page({
    */
   onPullDownRefresh: function () {
     comments.orderBy('comment_time', 'asc')
-    .where({
-      comment_topic_id: this.data.topic._id
-    }).limit(20).get().then(res => {
-      console.log(res.data)
-      for (let i = 0; i < res.data.length; i++) {
-        // 时间格式化
-        res.data[i].comment_time = common.dateFormat('yyyy年MM月dd日 hh:mm', res.data[i].comment_time)
-        let replyList = res.data[i].reply_list
-        if (replyList && replyList.length != 0) {
-          for (let j = 0; j < replyList.length; j++) {
-            const item = replyList[j];
-            item.reply_time = common.dateFormat('yyyy年MM月dd日 hh:mm', item.reply_time)
+      .where({
+        comment_topic_id: this.data.topic._id
+      }).limit(20).get().then(res => {
+        console.log(res.data)
+        for (let i = 0; i < res.data.length; i++) {
+          // 时间格式化
+          res.data[i].comment_time = common.dateFormat('yyyy年MM月dd日 hh:mm', res.data[i].comment_time)
+          let replyList = res.data[i].reply_list
+          if (replyList && replyList.length != 0) {
+            for (let j = 0; j < replyList.length; j++) {
+              const item = replyList[j];
+              item.reply_time = common.dateFormat('yyyy年MM月dd日 hh:mm', item.reply_time)
+            }
           }
         }
-      }
-      this.setData({
-        comment_list: res.data
+        this.setData({
+          comment_list: res.data
+        })
+        wx.stopPullDownRefresh()
       })
-      wx.stopPullDownRefresh()
-    })
   },
 
   onReachBottom: function () {
@@ -330,9 +358,9 @@ Page({
       })
       let page = this.data.pageNum + 1
       comments.orderBy('comment_time', 'asc')
-      .where({
-        comment_topic_id: this.data.topic._id
-      })
+        .where({
+          comment_topic_id: this.data.topic._id
+        })
         .skip(page * 20)
         .limit(20).get()
         .then(res => {
