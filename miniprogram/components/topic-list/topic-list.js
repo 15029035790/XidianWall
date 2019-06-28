@@ -72,7 +72,7 @@ Component({
               app.globalData.openId = res.result.openId
               this.getUserInfo()
             })
-          } else if(!app.globalData.nickName){
+          } else if (!app.globalData.nickName) {
             this.getUserInfo()
           } else {
             this.getList()
@@ -113,34 +113,32 @@ Component({
             viewNum: true,
             commentNum: true
           }).get().then(res => {
-            console.log(res.data)
-            for (let i = 0; i < res.data.length; i++) {
-              const item = res.data[i]
-              item.thumbState = false
-              item.thumbs = ''
-              if (item.thumbList && item.thumbList.length != 0) {
-                item.thumbs = item.thumbList.join('、')
-                if (item.thumbList.indexOf(app.globalData.nickName) > -1) {
-                  item.thumbState = true
-                }
-              } else {
-                item.thumbList = []
+            console.log("detail to update:", res.data[0])
+            const item = res.data[0]
+            item.thumbState = false
+            item.thumbs = ''
+            if (item.thumbList && item.thumbList.length != 0) {
+              item.thumbs = item.thumbList.join('、')
+              if (item.thumbList.indexOf(app.globalData.nickName) > -1) {
+                item.thumbState = true
               }
-              let thumbStr = 'topicList[' + i + '].thumbs'
-              let thumbNumStr = 'topicList[' + i + '].thumbNum'
-              let thumbStateStr = 'topicList[' + i + '].thumbState'
-              let thumbListStr = 'topicList[' + i + '].thumbList'
-              let viewNumStr = 'topicList[' + i + '].viewNum'
-              let commentNumStr = 'topicList[' + i + '].commentNum'
-              this.setData({
-                [thumbStateStr]: item.thumbState,
-                [thumbNumStr]: item.thumbNum,
-                [thumbStr]: item.thumbs,
-                [thumbListStr]: item.thumbList,
-                [viewNumStr]: item.viewNum,
-                [commentNumStr]: item.commentNum
-              })
+            } else {
+              item.thumbList = []
             }
+            let thumbStr = 'topicList[' + this.data.detailIndex + '].thumbs'
+            let thumbNumStr = 'topicList[' + this.data.detailIndex + '].thumbNum'
+            let thumbStateStr = 'topicList[' + this.data.detailIndex + '].thumbState'
+            let thumbListStr = 'topicList[' + this.data.detailIndex + '].thumbList'
+            let viewNumStr = 'topicList[' + this.data.detailIndex + '].viewNum'
+            let commentNumStr = 'topicList[' + this.data.detailIndex + '].commentNum'
+            this.setData({
+              [thumbStateStr]: item.thumbState,
+              [thumbNumStr]: item.thumbNum,
+              [thumbStr]: item.thumbs,
+              [thumbListStr]: item.thumbList,
+              [viewNumStr]: item.viewNum,
+              [commentNumStr]: item.commentNum
+            })
           })
       }
     }
@@ -263,7 +261,7 @@ Component({
     /**
      * 用于处理页面跳转的点击事件重复点击问题
      */
-    buttonClicked: function() {
+    buttonClicked: function () {
       this.setData({
         cardClicked: true
       })
@@ -293,6 +291,7 @@ Component({
         }
       }).then(res => {
         this.data.detailId = doc_id
+        this.data.detailIndex = index
         app.globalData.detailTopic = this.properties.topicList[index]
         wx.hideLoading()
         wx.navigateTo({
@@ -392,7 +391,7 @@ Component({
             })
           })
         }
-      } catch(e) {
+      } catch (e) {
         this.setData({
           thumbClickCount: 0
         })
